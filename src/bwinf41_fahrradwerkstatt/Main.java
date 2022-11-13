@@ -23,7 +23,7 @@ public class Main {
 		// Liste mit: Dauer Aufträge der davor + Dauer Auftrag selber
 		
 		ArrayList<Auftrag> orders = new ArrayList<>();
-					
+		
 		try {
 			Scanner scanner = new Scanner(Paths.get("data.txt"));
 			while (scanner.hasNextLine()) {
@@ -33,25 +33,13 @@ public class Main {
 		} catch (Exception e) {
 			System.out.println("Error");
 		}
-				
+		System.out.println("First Method: \n");
 		FirstMethod firstMethod = new FirstMethod();
 		firstMethod.work(orders, 0, 0);
+		System.out.println("\nSecond Method: \n");
+		SecondMethod secondMethod = new SecondMethod();
+		secondMethod.work(orders, 0, 0);
 		
 	}
 
 }
-
-/*
- * System.out.println(duration.size());
-		
-		float x = 0;
-		
-		float days = (x/480) + (x%480);
-		System.out.println(days);
-		
-		if(x > 1440) {
-			System.out.println("Maximale Wartezeit: " + df.format(x/1440) + " days.");
-		} else {
-			System.out.println("Maximale Wartezeit: " + df.format(x/60) + " h.");
-		}
-*/		
