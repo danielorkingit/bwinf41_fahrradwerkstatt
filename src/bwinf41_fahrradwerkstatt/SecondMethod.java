@@ -1,6 +1,7 @@
 package bwinf41_fahrradwerkstatt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class SecondMethod {
@@ -12,36 +13,67 @@ public class SecondMethod {
 			dayTime.startFirstDay();
 		}
 		
-		public void work(ArrayList<Auftrag> orders, int index, int remainingTime){
-
-			if (index != orders.size()) {
+		public void work(ArrayList<Auftrag> blueOrders, int remainingTime, Auftrag[] orders){
+			
+			if (!blueOrders.isEmpty()) {
+			
+				ArrayList<Auftrag> possibleOrders = calculatePOrders(blueOrders, dayTime.currentTime);
+				if (possibleOrders.isEmpty()) {
+					dayTime.nextDay();
+					work(blueOrders, 0, orders);
+				} 
+				int index = possibleOrders.get(0).indexInAL;
 				
-				int tmpStart = orders.get(index).getStart(); // ändern
-				int tmpDuration = orders.get(index).getDuration(); // ändern
+				int tmpStart = orders[index].getStart(); // ändern
+				int tmpDuration = orders[index].getDuration(); // ändern
+								
+				blueOrders.remove(index);
 				
 				if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay) { // Auftrag kann an einem Tag gemacht werden
 					dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
-					Auftrag tmp = orders.get(index);
+					Auftrag tmp = orders[index];
 					tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
-					orders.set(index, tmp);
-					work(orders, index+1, 0);
+					orders[index] = tmp;
+					work(blueOrders, 0, orders);
 				
 				} else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
 					if (remainingTime == 0 && dayTime.currentTime < tmpStart) remainingTime = remainingTime + (dayTime.endOfDay-tmpStart);
 					else if (remainingTime == 0) remainingTime = dayTime.endOfDay - dayTime.currentTime;
 					else remainingTime = remainingTime + 480;
 					dayTime.nextDay();
-					work(orders, index, remainingTime);
+					work(blueOrders, remainingTime, orders);
 					
 				} else {
 					dayTime.nextDay();
-					work(orders, index, 0);
+					work(blueOrders, 0, orders);
 				}
 			} else {
-				System.out.println("average: " + calculateAverage(orders));
-				System.out.println("highest: " + calculateHighest(orders));
+				System.out.println("average: " + calculateAverage(new ArrayList<>(Arrays.asList(orders))));
+				System.out.println("highest: " + calculateHighest(new ArrayList<>(Arrays.asList(orders))));
+				return;
 			}
-				
+		}
+
+		private ArrayList<Auftrag> removeUsedOrder(ArrayList<Auftrag> orders1, ArrayList<Auftrag> possibleOrders) {
+			for (Auftrag order : possibleOrders) {
+				orders1.remove(order.indexInAL);
+				System.out.print(orders1);
+			}
+			return orders1;
+		}
+
+		private ArrayList<Auftrag> calculatePOrders(ArrayList<Auftrag> orders, int currentTime) {
+			ArrayList<Auftrag> result = new ArrayList<>();
+			int index = 0;
+			for (Auftrag order : orders) {
+				if (order.startTime <= currentTime) {
+					order.indexInAL = index;
+					result.add(order);
+				}
+				index += 1;
+			}
+			result = sortInput(result);
+			return result;
 		}
 
 		private int calculateHighest(ArrayList<Auftrag> orders) {

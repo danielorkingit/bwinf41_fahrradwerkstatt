@@ -22,23 +22,24 @@ public class Main {
 		
 		// Liste mit: Dauer Aufträge der davor + Dauer Auftrag selber
 		
-		ArrayList<Auftrag> orders = new ArrayList<>();
+		ArrayList<Auftrag> orders1 = new ArrayList<>();
 		
 		try {
 			Scanner scanner = new Scanner(Paths.get("data.txt"));
 			while (scanner.hasNextLine()) {
-				orders.add(new Auftrag(scanner.nextInt(), scanner.nextInt()));
+				orders1.add(new Auftrag(scanner.nextInt(), scanner.nextInt()));
 			}
 			scanner.close();
 		} catch (Exception e) {
 			System.out.println("Error");
 		}
+		ArrayList<Auftrag> orders2 = orders1;
 		System.out.println("First Method: \n");
 		FirstMethod firstMethod = new FirstMethod();
-		firstMethod.work(orders, 0, 0);
+		firstMethod.work(orders1, 0, 0);
 		System.out.println("\nSecond Method: \n");
 		SecondMethod secondMethod = new SecondMethod();
-		secondMethod.work(orders, 0, 0);
+		secondMethod.work(orders2, 0, orders2.toArray(new Auftrag[orders2.size()]));
 		
 	}
 

@@ -8,6 +8,7 @@ public class Auftrag {
 	public int duration;
 	public int warteZeit;
 	public int fertigStellung;
+	public int indexInAL;
 		
 	public Auftrag(int startTime, int duration) {
 		this.startTime = startTime;
