@@ -13,39 +13,41 @@ public class SecondMethod {
 			dayTime.startFirstDay();
 		}
 		
-		public void work(ArrayList<Auftrag> blueOrders, int remainingTime, Auftrag[] orders){
+		public void work(ArrayList<Auftrag> blueOrders, int remainingTime, Auftrag[] orders, int index){
 			
-			if (!blueOrders.isEmpty()) {
+			if (!blueOrders.isEmpty() || index != 0) {
 			
-				ArrayList<Auftrag> possibleOrders = calculatePOrders(blueOrders, dayTime.currentTime);
-				if (possibleOrders.isEmpty()) {
+				ArrayList<Auftrag> possibleOrders = calculatePOrders(blueOrders, dayTime.endOfDay);
+				if (possibleOrders.isEmpty() && index == 0) {
 					dayTime.nextDay();
-					work(blueOrders, 0, orders);
+					work(blueOrders, 0, orders, 0);
 				} 
-				int index = possibleOrders.get(0).indexInAL;
 				
+				if (index == 0) index = possibleOrders.get(0).indexInAL;
+								
 				int tmpStart = orders[index].getStart(); // ändern
 				int tmpDuration = orders[index].getDuration(); // ändern
 								
 				blueOrders.remove(index);
 				
 				if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay) { // Auftrag kann an einem Tag gemacht werden
-					dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
+					if (dayTime.currentTime < tmpStart) dayTime.currentTime = tmpStart+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
+					else dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
 					Auftrag tmp = orders[index];
 					tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
 					orders[index] = tmp;
-					work(blueOrders, 0, orders);
+					work(blueOrders, 0, orders, 0);
 				
 				} else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
-					if (remainingTime == 0 && dayTime.currentTime < tmpStart) remainingTime = remainingTime + (dayTime.endOfDay-tmpStart);
-					else if (remainingTime == 0) remainingTime = dayTime.endOfDay - dayTime.currentTime;
+					if (remainingTime == 0 && dayTime.currentTime != (dayTime.endOfDay-480)) remainingTime = (dayTime.endOfDay-dayTime.currentTime);
+					else if (remainingTime == 0 && tmpStart > dayTime.endOfDay-480) remainingTime = dayTime.endOfDay-tmpStart;
 					else remainingTime = remainingTime + 480;
 					dayTime.nextDay();
-					work(blueOrders, remainingTime, orders);
+					work(blueOrders, remainingTime, orders, index);
 					
 				} else {
 					dayTime.nextDay();
-					work(blueOrders, 0, orders);
+					work(blueOrders, 0, orders, 0);
 				}
 			} else {
 				System.out.println("average: " + calculateAverage(new ArrayList<>(Arrays.asList(orders))));
@@ -66,7 +68,7 @@ public class SecondMethod {
 			ArrayList<Auftrag> result = new ArrayList<>();
 			int index = 0;
 			for (Auftrag order : orders) {
-				if (order.startTime <= currentTime) {
+				if (order.startTime < currentTime) {
 					order.indexInAL = index;
 					result.add(order);
 				}

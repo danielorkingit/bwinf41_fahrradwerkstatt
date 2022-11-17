@@ -28,10 +28,12 @@ public class FirstMethod {
 				Auftrag tmp = orders.get(index);
 				tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
 				orders.set(index, tmp);
+				System.out.println(orders.get(index).warteZeit);
 				work(orders, index+1, 0);
 			
-			} else if (tmpStart < dayTime.endOfDay && tmpStart <= dayTime.currentTime){ // Auftrag braucht länger als einen Tag
-				if (remainingTime == 0 && dayTime.currentTime < tmpStart) remainingTime = remainingTime + (dayTime.endOfDay-tmpStart);
+			}else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
+				if (remainingTime == 0 && dayTime.currentTime != (dayTime.endOfDay-480)) remainingTime = (dayTime.endOfDay-dayTime.currentTime);
+				else if (remainingTime == 0 && tmpStart > dayTime.endOfDay-480) remainingTime = dayTime.endOfDay-tmpStart;
 				else remainingTime = remainingTime + 480;
 				dayTime.nextDay();
 				work(orders, index, remainingTime);
@@ -46,19 +48,6 @@ public class FirstMethod {
 		}
 			
 	}
-
-	private ArrayList<Auftrag> calculatePOrders(ArrayList<Auftrag> orders, int currentTime) {
-			ArrayList<Auftrag> result = new ArrayList<>();
-			int index = 0;
-			for (Auftrag order : orders) {
-				if (order.startTime <= currentTime) {
-					order.indexInAL = index;
-					result.add(order);
-				}
-				index += 1;
-			}
-			return result;
-		}
 
 	private int calculateHighest(ArrayList<Auftrag> orders) {
 		int highestWarteZeit = 0;

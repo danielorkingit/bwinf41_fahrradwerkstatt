@@ -39,7 +39,7 @@ public class Main {
 		firstMethod.work(orders1, 0, 0);
 		System.out.println("\nSecond Method: \n");
 		SecondMethod secondMethod = new SecondMethod();
-		secondMethod.work(orders2, 0, orders2.toArray(new Auftrag[orders2.size()]));
+		secondMethod.work(orders2, 0, orders2.toArray(new Auftrag[orders2.size()]), 0);
 		
 	}
 
