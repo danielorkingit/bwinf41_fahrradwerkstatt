@@ -23,7 +23,7 @@ public class Main {
 		// Liste mit: Dauer Aufträge der davor + Dauer Auftrag selber
 		
 		ArrayList<Auftrag> orders1 = new ArrayList<>();
-		
+				
 		try {
 			Scanner scanner = new Scanner(Paths.get("data.txt"));
 			while (scanner.hasNextLine()) {
@@ -35,12 +35,13 @@ public class Main {
 		}
 		ArrayList<Auftrag> orders2 = orders1;
 		System.out.println("First Method: \n");
+		System.out.println("Wartezeiten: \n");
 		FirstMethod firstMethod = new FirstMethod();
 		firstMethod.work(orders1, 0, 0);
 		System.out.println("\nSecond Method: \n");
+		System.out.println("Wartezeiten: \n");
 		SecondMethod secondMethod = new SecondMethod();
 		secondMethod.work(orders2, 0, orders2.toArray(new Auftrag[orders2.size()]), 0);
-		
 	}
 
 }

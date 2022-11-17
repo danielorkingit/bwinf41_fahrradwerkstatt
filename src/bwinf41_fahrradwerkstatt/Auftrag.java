@@ -9,11 +9,11 @@ public class Auftrag {
 	public int warteZeit;
 	public int fertigStellung;
 	public int indexInAL;
+	public int key;
 		
 	public Auftrag(int startTime, int duration) {
 		this.startTime = startTime;
 		this.duration = duration;
-	
 	}
 	
 	public int getStart() {

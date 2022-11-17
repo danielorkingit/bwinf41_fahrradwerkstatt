@@ -15,7 +15,7 @@ public class SecondMethod {
 		
 		public void work(ArrayList<Auftrag> blueOrders, int remainingTime, Auftrag[] orders, int index){
 			
-			if (!blueOrders.isEmpty() || index != 0) {
+			if (!blueOrders.isEmpty()) {
 			
 				ArrayList<Auftrag> possibleOrders = calculatePOrders(blueOrders, dayTime.endOfDay);
 				if (possibleOrders.isEmpty() && index == 0) {
@@ -23,19 +23,19 @@ public class SecondMethod {
 					work(blueOrders, 0, orders, 0);
 				} 
 				
-				if (index == 0) index = possibleOrders.get(0).indexInAL;
+				if (remainingTime == 0) index = possibleOrders.get(0).indexInAL;
 								
-				int tmpStart = orders[index].getStart(); // ändern
-				int tmpDuration = orders[index].getDuration(); // ändern
-								
-				blueOrders.remove(index);
-				
+				int tmpStart = blueOrders.get(index).getStart(); // ändern
+				int tmpDuration = blueOrders.get(index).getDuration(); // ändern
+												
 				if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay) { // Auftrag kann an einem Tag gemacht werden
 					if (dayTime.currentTime < tmpStart) dayTime.currentTime = tmpStart+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
 					else dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
-					Auftrag tmp = orders[index];
+					Auftrag tmp = orders[possibleOrders.get(0).key];
 					tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
-					orders[index] = tmp;
+					orders[possibleOrders.get(0).key] = tmp;
+					System.out.println(tmp.warteZeit);
+					blueOrders.remove(index);
 					work(blueOrders, 0, orders, 0);
 				
 				} else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
@@ -49,19 +49,10 @@ public class SecondMethod {
 					dayTime.nextDay();
 					work(blueOrders, 0, orders, 0);
 				}
-			} else {
-				System.out.println("average: " + calculateAverage(new ArrayList<>(Arrays.asList(orders))));
-				System.out.println("highest: " + calculateHighest(new ArrayList<>(Arrays.asList(orders))));
-				return;
 			}
-		}
-
-		private ArrayList<Auftrag> removeUsedOrder(ArrayList<Auftrag> orders1, ArrayList<Auftrag> possibleOrders) {
-			for (Auftrag order : possibleOrders) {
-				orders1.remove(order.indexInAL);
-				System.out.print(orders1);
-			}
-			return orders1;
+			System.out.println("\nDurchschnittliche Wartezeit: " + calculateAverage(new ArrayList<>(Arrays.asList(orders))));
+			System.out.println("Höchste Wartezeit: " + calculateHighest(new ArrayList<>(Arrays.asList(orders))));
+			System.out.print(false);
 		}
 
 		private ArrayList<Auftrag> calculatePOrders(ArrayList<Auftrag> orders, int currentTime) {
