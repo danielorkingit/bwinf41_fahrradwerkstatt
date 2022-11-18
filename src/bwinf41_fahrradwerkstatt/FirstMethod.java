@@ -27,7 +27,6 @@ public class FirstMethod {
 				Auftrag tmp = orders.get(index);
 				tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
 				orders.set(index, tmp);
-				System.out.println(orders.get(index).warteZeit);
 				work(orders, index+1, 0);
 			
 			}else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
