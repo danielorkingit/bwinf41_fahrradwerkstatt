@@ -1,11 +1,6 @@
 package bwinf41_fahrradwerkstatt;
 
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 
 public class FirstMethod {
 	
@@ -15,7 +10,7 @@ public class FirstMethod {
 		dayTime.startFirstDay();
 	}
 	
-	public void work(ArrayList<Auftrag> orders, int index, int remainingTime){
+	public void work(ArrayList<Auftrag> orders, int index, int remainingTime, ArrayList<Integer> warteZeit){
 
 		if (index != orders.size()) {
 			
@@ -24,43 +19,41 @@ public class FirstMethod {
 			
 			if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay && tmpStart <= dayTime.currentTime) { // Auftrag kann an einem Tag gemacht werden
 				dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
-				Auftrag tmp = orders.get(index);
-				tmp.setData((dayTime.currentTime-tmpStart), dayTime.currentTime);
-				orders.set(index, tmp);
-				work(orders, index+1, 0);
+				warteZeit.add(dayTime.currentTime-tmpStart);
+				work(orders, index+1, 0, warteZeit);
 			
 			}else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
 				if (remainingTime == 0 && dayTime.currentTime != (dayTime.endOfDay-480)) remainingTime = (dayTime.endOfDay-dayTime.currentTime);
 				else if (remainingTime == 0 && tmpStart > dayTime.endOfDay-480) remainingTime = dayTime.endOfDay-tmpStart;
 				else remainingTime = remainingTime + 480;
 				dayTime.nextDay();
-				work(orders, index, remainingTime);
+				work(orders, index, remainingTime, warteZeit);
 				
 			} else {
 				dayTime.nextDay();
-				work(orders, index, 0);
+				work(orders, index, 0, warteZeit);
 			}
 		} else {
-			System.out.println("\nDurchschnittliche Wartezeit: " + calculateAverage(orders));
-			System.out.println("Höchste Wartezeit: " + calculateHighest(orders));
+			System.out.println("\nDurchschnittliche Wartezeit: " + calculateAverage(warteZeit, orders.size()) + " Minuten \n");
+			System.out.println("Höchste Wartezeit: " + calculateHighest(warteZeit) + " Minuten");
 		}
 			
 	}
 
-	private int calculateHighest(ArrayList<Auftrag> orders) {
+	private int calculateHighest(ArrayList<Integer> warteZeit) {
 		int highestWarteZeit = 0;
-		for (Auftrag order : orders) {
-			if (order.warteZeit > highestWarteZeit) highestWarteZeit = order.warteZeit;
+		for (int order : warteZeit) {
+			if (order > highestWarteZeit) highestWarteZeit = order;
 		}
 		return highestWarteZeit;
 	}
 
-	private int calculateAverage(ArrayList<Auftrag> orders) {
+	private int calculateAverage(ArrayList<Integer> warteZeit, int total) {
 		int totalWarteZeit = 0;
-		for (Auftrag order : orders) {
-			totalWarteZeit = totalWarteZeit + order.warteZeit;
+		for (int order : warteZeit) {
+			totalWarteZeit += order;
 		}
-		return totalWarteZeit/orders.size();
-	};
+		return totalWarteZeit/total;
+	}
 	
 }

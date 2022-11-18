@@ -11,10 +11,9 @@ public class Auftrag {
 	public int indexInAL;
 	public int key;
 		
-	public Auftrag(int startTime, int duration, int key) {
+	public Auftrag(int startTime, int duration) {
 		this.startTime = startTime;
 		this.duration = duration;
-		this.key = key;
 	}
 	
 	public int getStart() {

@@ -1,7 +1,6 @@
 package bwinf41_fahrradwerkstatt;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class SecondMethod {
@@ -48,8 +47,8 @@ public class SecondMethod {
 						work(blueOrders, 0, orders, 0, warteZeit);
 					}
 				} else {
-					System.out.println("\nDurchschnittliche Wartezeit: " + calculateAverage(warteZeit, orders.length));
-					System.out.println("Höchste Wartezeit: " + calculateHighest(warteZeit));
+					System.out.println("\nDurchschnittliche Wartezeit: " + calculateAverage(warteZeit, orders.length) + " Minuten \n");
+					System.out.println("Höchste Wartezeit: " + calculateHighest(warteZeit) + " Minuten");
 				}
 			} catch (Exception e) {
 				return;
