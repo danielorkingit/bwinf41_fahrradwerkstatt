@@ -49,7 +49,7 @@ public class Main {
 			ThirdMethod thirdMethod = new ThirdMethod();
 			thirdMethod.work(orders1, 0, orders1.toArray(new Auftrag[orders1.size()]), 0, new ArrayList<Integer>());
 		} catch (Exception e) {
-			System.out.println("\nEnter boolean values to print out the third-method.");
+			System.out.println("\nGeben Sie Boolean-Werte ein, um die dritte Methode auszuführen.");
 		}
 		
 		
