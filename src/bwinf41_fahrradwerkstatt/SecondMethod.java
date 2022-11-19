@@ -28,7 +28,8 @@ public class SecondMethod {
 					int tmpStart = blueOrders.get(index).getStart(); // ändern
 					int tmpDuration = blueOrders.get(index).getDuration(); // ändern
 					
-					if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay) { // Auftrag kann an einem Tag gemacht werden
+					if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay) { 
+						// Auftrag kann an einem Tag gemacht werden
 						if (dayTime.currentTime < tmpStart) dayTime.currentTime = tmpStart+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
 						else dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
 						warteZeit.add(dayTime.currentTime-tmpStart);
@@ -36,8 +37,11 @@ public class SecondMethod {
 						work(blueOrders, 0, orders, 0, warteZeit);
 					
 					} else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
+						// Mitten am Tag
 						if (remainingTime == 0 && dayTime.currentTime != (dayTime.endOfDay-480)) remainingTime = (dayTime.endOfDay-dayTime.currentTime);
+						// Auftrag kommt mitten am Tag rein
 						else if (remainingTime == 0 && tmpStart > dayTime.endOfDay-480) remainingTime = dayTime.endOfDay-tmpStart;
+						// Während der Auftrag erledigt wird -> mehr als ein Tag Arbeit
 						else remainingTime = remainingTime + 480;
 						dayTime.nextDay();
 						work(blueOrders, remainingTime, orders, index, warteZeit);
@@ -60,12 +64,13 @@ public class SecondMethod {
 			int index = 0;
 			for (Auftrag order : orders) {
 				if (order.startTime < currentTime) {
+					// Index für die blueOrders-Liste
 					order.indexInAL = index;
 					result.add(order);
 				}
 				index += 1;
 			}
-			result = sortInput(result);
+			result = sortInput(result); // Nach der kleinste Länge vorne sortieren
 			return result;
 		}
 
@@ -86,6 +91,7 @@ public class SecondMethod {
 		}
 
 		public ArrayList<Auftrag> sortInput(ArrayList<Auftrag> orders) {
+			// Comparator -> Auftrag-Klasse
 			Collections.sort(orders, Auftrag.StuDuration);
 			return orders;
 		};

@@ -17,14 +17,18 @@ public class FirstMethod {
 			int tmpStart = orders.get(index).getStart();
 			int tmpDuration = orders.get(index).getDuration();
 			
-			if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay && tmpStart <= dayTime.currentTime) { // Auftrag kann an einem Tag gemacht werden
+			if (tmpStart < dayTime.endOfDay &&  (dayTime.currentTime + tmpDuration - remainingTime) < dayTime.endOfDay && tmpStart <= dayTime.currentTime) { 
+				// Auftrag kann an einem Tag gemacht werden
 				dayTime.currentTime = dayTime.currentTime+tmpDuration-remainingTime; // Zeitpunkt beim Abschließen des Aufrags
 				warteZeit.add(dayTime.currentTime-tmpStart);
 				work(orders, index+1, 0, warteZeit);
 			
 			}else if (tmpStart < dayTime.endOfDay){ // Auftrag braucht länger als einen Tag
+				// Mitten am Tag
 				if (remainingTime == 0 && dayTime.currentTime != (dayTime.endOfDay-480)) remainingTime = (dayTime.endOfDay-dayTime.currentTime);
+				// Auftrag kommt mitten am Tag rein
 				else if (remainingTime == 0 && tmpStart > dayTime.endOfDay-480) remainingTime = dayTime.endOfDay-tmpStart;
+				// Während der Auftrag erledigt wird -> mehr als ein Tag Arbeit
 				else remainingTime = remainingTime + 480;
 				dayTime.nextDay();
 				work(orders, index, remainingTime, warteZeit);
