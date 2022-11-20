@@ -1,5 +1,8 @@
 package bwinf41_fahrradwerkstatt;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,13 +21,14 @@ public class Main {
 		ArrayList<Auftrag> orders1 = new ArrayList<>();
 						
 		try {
-			Scanner scanner = new Scanner(Paths.get("data.txt"));
+			Scanner scanner = new Scanner(Paths.get(new java.io.File(".").getCanonicalPath() + "/data.txt"));
 			while (scanner.hasNextLine()) {
 				orders1.add(new Auftrag(scanner.nextInt(), scanner.nextInt()));
 			}
 			scanner.close();
 		} catch (Exception e) {
-			System.out.println("Error");
+			System.out.println("Keine Datei gefunden.");
+			return;
 		}
 		
 		System.out.println("Erste Methode: \n");
